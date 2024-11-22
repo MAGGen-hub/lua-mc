@@ -1,0 +1,21 @@
+Name,Value,Desc
+
+__MAIN_CYCLE__,0,Tells iterator that it was called from main cycle.
+__SINGLECALL__,false,One call function with return
+__RECALLABLE__,1,Recallable loader function
+__RESULTABLE__,2,Function with regetable results
+
+__SYMBOL__,1,Undefined punctuation
+__OPERATOR__,2,Defined punctuation
+__WORD__,3,Anything that starts with [A-Za-z]
+__KEYWORD__,4,Located keyword
+__SPACE__,5,Space sequence
+__NUMBER__,6,Located number
+__STRING__,7,Located string
+__VALUE__,8,Located var_args/number/nil/boolean
+__OPEN_BREAKET__,9,Any open breaket
+__CLOSE_BREAKET__,10,Any close breaket
+__COMMENT__,11,Comment that means nothing to compiller
+__UNFINISHED__,12,Unfinished comment/string/structure/anything
+
+__TRUE__,1,boolean "avoider"

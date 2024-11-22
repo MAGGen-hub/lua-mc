@@ -1,0 +1,1073 @@
+[maggen@arch tests]$ lua5.1 ./lua51_lua_mc_basic_tests.lua 1
+
+WARNIGN!
+Bitop.lua loaded. Bitwize operators performance might be low.
+
+
+Selected test: 	1	- 	single_lambda_test
+SOURCE CODE  : 
+	    
+            local dbg_str = "debug string"
+    
+            -- default lua5.1 function
+            local func = function (a,b) return a+b end
+    
+            -- lambda with return included
+            local func1 = a,b -> a + b end
+    
+            -- lambda with no return
+            local func2 = a,b => return a+b end
+    
+            --argument-less lambda
+            local func3 = ()=> return dbg_str end
+    
+    
+            local test_print = function (f)
+                local result = f(3,4)
+                print(result)
+                return result
+            end
+            --assert results
+            assert(test_print(func ) == 7)
+            assert(test_print(func1) == 7)
+            assert(test_print(func2) == 7)
+            assert(test_print(func3) == dbg_str)
+        
+PREPROCESSED : 
+    
+            local dbg_str = "debug string"
+    
+            -- default lua5.1 function
+            local func = function (a,b) return a+b end
+    
+            -- lambda with return included
+            local func1 = function(a,b )return  a + b end
+    
+            -- lambda with no return
+            local func2 = function(a,b ) return a+b end
+    
+            --argument-less lambda
+            local func3 = function() return dbg_str end
+    
+    
+            local test_print = function (f)
+                local result = f(3,4)
+                print(result)
+                return result
+            end
+            --assert results
+            assert(test_print(func ) == 7)
+            assert(test_print(func1) == 7)
+            assert(test_print(func2) == 7)
+            assert(test_print(func3) == dbg_str)
+        
+7
+7
+7
+debug string
+Call output  : 	true
+Error        : 	nil
+[maggen@arch tests]$ lua5.1 ./lua51_lua_mc_basic_tests.lua 2
+
+WARNIGN!
+Bitop.lua loaded. Bitwize operators performance might be low.
+
+
+Selected test: 	2	- 	single_default_args_test
+SOURCE CODE  : 
+	             
+             --single arg
+             local func = function (a := 1) return a end
+             
+             --second arg with formula
+             local func1= function (a, b := 1+1*1) return b end
+             
+             --ULTRA args
+             local func2= function (a := function() end, b := 2^4) return a,b end
+             
+             
+             local test_print = function (f)
+                 local result = f()
+                 print(result)
+                 return result
+             end
+             
+             --assert results
+             assert(test_print(func))
+             assert(test_print(func1))
+             assert(test_print(func2))
+             
+             
+         
+PREPROCESSED : 
+local __cssc__def_arg=__lua_mc__runtime('func.def_arg');             
+             --single arg
+             local func = function (a )a =__cssc__def_arg{1,a ,1,1} return a end
+             
+             --second arg with formula
+             local func1= function (a, b )b =__cssc__def_arg{2,b ,1,1+1*1} return b end
+             
+             --ULTRA args
+             local func2= function (a , b )a ,b =__cssc__def_arg{1,a ,1,function() end,2,b ,1,2^4} return a,b end
+             
+             
+             local test_print = function (f)
+                 local result = f()
+                 print(result)
+                 return result
+             end
+             
+             --assert results
+             assert(test_print(func))
+             assert(test_print(func1))
+             assert(test_print(func2))
+             
+             
+         
+1
+2
+function: 0x639234859a40
+Call output  : 	true
+Error        : 	nil
+[maggen@arch tests]$ lua5.1 ./lua51_lua_mc_basic_tests.lua 3
+
+WARNIGN!
+Bitop.lua loaded. Bitwize operators performance might be low.
+
+
+Selected test: 	3	- 	single_number_format_test
+SOURCE CODE  : 
+	             
+             --binary test
+             print(assert(0b10001 == 17)) --default
+             print(assert(0b0.1 == 0.5))  --floating point
+             print(assert(0b0.01 == 0.25))
+             print(assert(0b111E+1 == 7E+1)) --decimal exponenta
+             
+             --octal test
+             print(assert(0o10 == 8)) --default
+             print(assert(0o4501 == 2369)) --hard
+             print(assert(0o0.1 == 0.125)) --floating point
+             print(assert(0o10.201 == 8.251953125))
+             print(assert(0o11.2E-1 == 9.25E-1)) --exponenta
+             
+         
+PREPROCESSED : 
+             
+             --binary test
+             print(assert(17 == 17)) --default
+             print(assert(0.5 == 0.5))  --floating point
+             print(assert(0.25 == 0.25))
+             print(assert(7E+1 == 7E+1)) --decimal exponenta
+             
+             --octal test
+             print(assert(8 == 8)) --default
+             print(assert(2369 == 2369)) --hard
+             print(assert(0.125 == 0.125)) --floating point
+             print(assert(8.251953125 == 8.251953125))
+             print(assert(9.25E-1 == 9.25E-1)) --exponenta
+             
+         
+true
+true
+true
+true
+true
+true
+true
+true
+true
+Call output  : 	true
+Error        : 	nil
+[maggen@arch tests]$ lua5.1 ./lua51_lua_mc_basic_tests.lua 4
+
+WARNIGN!
+Bitop.lua loaded. Bitwize operators performance might be low.
+
+
+Selected test: 	4	- 	single_C_assignment_addition
+SOURCE CODE  : 
+	             local a = 1
+             
+             a+=1
+             assert(a==2)
+             
+             a*=8
+             assert(a==16)
+             
+             a/=2
+             assert(a==8)
+             
+             a-=3
+             assert(a==5)
+             
+         
+PREPROCESSED : 
+             local a = 1
+             
+             a=a+(1
+             )assert(a==2)
+             
+             a=a*(8
+             )assert(a==16)
+             
+             a=a/(2
+             )assert(a==8)
+             
+             a=a-(3
+             )assert(a==5)
+             
+         
+Call output  : 	true
+Error        : 	nil
+[maggen@arch tests]$ lua5.1 ./lua51_lua_mc_basic_tests.lua 5
+
+WARNIGN!
+Bitop.lua loaded. Bitwize operators performance might be low.
+
+
+Selected test: 	5	- 	single_nil_forgiving_test
+SOURCE CODE  : 
+	         
+             local nil_call = function (obj) return obj?() end
+             local nil_call_str = function (obj) return obj?"str" end
+             local nil_table_ind = function (obj) return obj?.index end
+             local test_obj = { index = 1 }
+             local test_obj_nil = {}
+             local test_func = function(arg) if arg=="str" then return "str" else return "default" end end
+             
+             --nil functions 
+             assert(nil_call(test_func)=="default")
+             assert(nil_call_str(test_func)=="str")
+             assert(nil_call()==nil)
+             assert(nil_call_str()==nil)
+             
+             --table nil indexing
+             assert(nil_table_ind(test_obj)==1)
+             assert(nil_table_ind(test_obj_nil)==nil)
+             assert(nil_table_ind()==nil)
+             
+         
+PREPROCESSED : 
+local __cssc__op_nc=__lua_mc__runtime('nilF.basic');         
+             local nil_call = function (obj) return __cssc__op_nc(obj)() end
+             local nil_call_str = function (obj) return __cssc__op_nc(obj)"str" end
+             local nil_table_ind = function (obj) return __cssc__op_nc(obj).index end
+             local test_obj = { index = 1 }
+             local test_obj_nil = {}
+             local test_func = function(arg) if arg=="str" then return "str" else return "default" end end
+             
+             --nil functions 
+             assert(nil_call(test_func)=="default")
+             assert(nil_call_str(test_func)=="str")
+             assert(nil_call()==nil)
+             assert(nil_call_str()==nil)
+             
+             --table nil indexing
+             assert(nil_table_ind(test_obj)==1)
+             assert(nil_table_ind(test_obj_nil)==nil)
+             assert(nil_table_ind()==nil)
+             
+         
+Call output  : 	true
+Error        : 	nil
+[maggen@arch tests]$ lua5.1 ./lua51_lua_mc_basic_tests.lua 6
+
+WARNIGN!
+Bitop.lua loaded. Bitwize operators performance might be low.
+
+
+Selected test: 	6	- 	single_lua5.3_opts_test_(bitwizes)
+SOURCE CODE  : 
+	             
+             --single operator test
+             assert(2>>1==1)
+             assert(2<<1==4)
+             assert(2|4==6)
+             assert(4|2==6)
+             assert(2&4==0)
+             assert(4&2==0)
+             assert(2==2&3)
+             assert(4==6&5)
+             assert(0==4~4)
+             
+             --complex
+             assert(2<<4|1+17&~18==32)
+             assert(7*3>>1|1+12==15)
+             assert(19==800>>4&10<<1|3&3)
+             
+             --idiv
+             assert(8//3==2)
+             
+             --metatable
+             local metadata = {
+                 __shl = function(a,b) return "shift left" end,
+                 __shr = function(a,b) return "shift right"end,
+                 __bnot= function(a)   return "binary not" end,
+                 __bor = function(a,b) return "binary or"  end,
+                 __band= function(a,b) return "binary and" end,
+                 __bxor= function(a,b) return "binary xor" end,
+                 __idiv= function(a,b) return "int divide" end
+             }
+             local obj = setmetatable({},metadata)
+             
+             assert(obj<<1 =="shift left")
+             assert(obj>>1 =="shift right")
+             assert(~obj   =="binary not")
+             assert(1|obj  =="binary or" )
+             assert(1&obj  =="binary and")
+             assert(obj~obj=="binary xor")
+             assert(obj//1 =="int divide")
+             
+         
+PREPROCESSED : 
+local __cssc__bit_shr,__cssc__bit_shl,__cssc__bit_bor,__cssc__bit_band,__cssc__bit_bxor,__cssc__bit_bnot,__cssc__bit_idiv=__lua_mc__runtime('bit.shr','bit.shl','bit.bor','bit.band','bit.bxor','bit.bnot','bit.idiv');             
+             --single operator test
+             assert(__cssc__bit_shr(2,1)==1)
+             assert(__cssc__bit_shl(2,1)==4)
+             assert(__cssc__bit_bor(2,4)==6)
+             assert(__cssc__bit_bor(4,2)==6)
+             assert(__cssc__bit_band(2,4)==0)
+             assert(__cssc__bit_band(4,2)==0)
+             assert(2==__cssc__bit_band(2,3))
+             assert(4==__cssc__bit_band(6,5))
+             assert(0==__cssc__bit_bxor(4,4))
+             
+             --complex
+             assert(__cssc__bit_bor(__cssc__bit_shl(2,4),__cssc__bit_band(1+17,__cssc__bit_bnot(18)))==32)
+             assert(__cssc__bit_bor(__cssc__bit_shr(7*3,1),1+12)==15)
+             assert(19==__cssc__bit_bor(__cssc__bit_band(__cssc__bit_shr(800,4),__cssc__bit_shl(10,1)),__cssc__bit_band(3,3)))
+             
+             --idiv
+             assert(__cssc__bit_idiv(8,3)==2)
+             
+             --metatable
+             local metadata = {
+                 __shl = function(a,b) return "shift left" end,
+                 __shr = function(a,b) return "shift right"end,
+                 __bnot= function(a)   return "binary not" end,
+                 __bor = function(a,b) return "binary or"  end,
+                 __band= function(a,b) return "binary and" end,
+                 __bxor= function(a,b) return "binary xor" end,
+                 __idiv= function(a,b) return "int divide" end
+             }
+             local obj = setmetatable({},metadata)
+             
+             assert(__cssc__bit_shl(obj,1 )=="shift left")
+             assert(__cssc__bit_shr(obj,1 )=="shift right")
+             assert(__cssc__bit_bnot(obj   )=="binary not")
+             assert(__cssc__bit_bor(1,obj  )=="binary or" )
+             assert(__cssc__bit_band(1,obj  )=="binary and")
+             assert(__cssc__bit_bxor(obj,obj)=="binary xor")
+             assert(__cssc__bit_idiv(obj,1 )=="int divide")
+             
+         
+Call output  : 	true
+Error        : 	nil
+[maggen@arch tests]$ lua5.1 -i ./lua51_lua_mc_basic_tests.lua 5
+Lua 5.1.5  Copyright (C) 1994-2012 Lua.org, PUC-Rio
+
+WARNIGN!
+Bitop.lua loaded. Bitwize operators performance might be low.
+
+
+Selected test: 	5	- 	single_nil_forgiving_test
+SOURCE CODE  : 
+	         
+             local nil_call = function (obj) return obj?() end
+             local nil_call_str = function (obj) return obj?"str" end
+             local nil_table_ind = function (obj) return obj?.index end
+             local test_obj = { index = 1 }
+             local test_obj_nil = {}
+             local test_func = function(arg) if arg=="str" then return "str" else return "default" end end
+             
+             --nil functions 
+             assert(nil_call(test_func)=="default")
+             assert(nil_call_str(test_func)=="str")
+             assert(nil_call()==nil)
+             assert(nil_call_str()==nil)
+             
+             --table nil indexing
+             assert(nil_table_ind(test_obj)==1)
+             assert(nil_table_ind(test_obj_nil)==nil)
+             assert(nil_table_ind()==nil)
+             
+         
+PREPROCESSED : 
+local __cssc__op_nc=__lua_mc__runtime('nilF.basic');         
+             local nil_call = function (obj) return __cssc__op_nc(obj)() end
+             local nil_call_str = function (obj) return __cssc__op_nc(obj)"str" end
+             local nil_table_ind = function (obj) return __cssc__op_nc(obj).index end
+             local test_obj = { index = 1 }
+             local test_obj_nil = {}
+             local test_func = function(arg) if arg=="str" then return "str" else return "default" end end
+             
+             --nil functions 
+             assert(nil_call(test_func)=="default")
+             assert(nil_call_str(test_func)=="str")
+             assert(nil_call()==nil)
+             assert(nil_call_str()==nil)
+             
+             --table nil indexing
+             assert(nil_table_ind(test_obj)==1)
+             assert(nil_table_ind(test_obj_nil)==nil)
+             assert(nil_table_ind()==nil)
+             
+         
+Call output  : 	true
+Error        : 	nil
+> P.pretty_print(comp1)
+{
+   Cdata = {
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 2 },
+     { 4 },
+     { 2, 0 },
+     { 9 },
+     { 3 },
+     { 10, 8 },
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 10 },
+     { 2, 16 },
+     { 9 },
+     { 10, 20 },
+     { 2, 0 },
+     { 4, 6 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 2 },
+     { 4 },
+     { 2, 0 },
+     { 9 },
+     { 3 },
+     { 10, 30 },
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 10 },
+     { 2, 16 },
+     { 7 },
+     { 2, 0 },
+     { 4, 28 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 2 },
+     { 4 },
+     { 2, 0 },
+     { 9 },
+     { 3 },
+     { 10, 51 },
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 10 },
+     { 2, 16 },
+     { 3 },
+     { 2, 0 },
+     { 4, 49 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 2 },
+     { 9 },
+     { 3 },
+     { 2, 2 },
+     { 6 },
+     { 10, 70 },
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 2 },
+     { 9 },
+     { 10, 80 },
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 2 },
+     { 4 },
+     { 2, 0 },
+     { 9 },
+     { 3 },
+     { 10, 89 },
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 3 },
+     { 2, 6 },
+     { 7 },
+     { 2, 0 },
+     { 4, 93 },
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 7 },
+     { 2, 0 },
+     { 4, 99 },
+     { 2, 0 },
+     { 4 },
+     { 2, 0 },
+     { 7 },
+     { 2, 0 },
+     { 4, 105 },
+     { 2, 0 },
+     { 4, 87 },
+     { 11 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 10, 120 },
+     { 2, 6 },
+     { 7 },
+     { 10, 117 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 10, 132 },
+     { 2, 6 },
+     { 7 },
+     { 10, 129 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 10, 144 },
+     { 2, 6 },
+     { 8 },
+     { 10, 141 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 10, 155 },
+     { 2, 6 },
+     { 8 },
+     { 10, 152 },
+     { 11 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 10, 167 },
+     { 2, 6 },
+     { 6 },
+     { 10, 164 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 10, 179 },
+     { 2, 6 },
+     { 8 },
+     { 10, 176 },
+     { 2, 0 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 3 },
+     { 2, 16 },
+     { 9 },
+     { 10, 191 },
+     { 2, 6 },
+     { 8 },
+     { 10, 188 },
+     { 2, 0 },
+     del = function: 0x59e777a9a780,
+     lvl = {
+       ["("] = { { [")"] = 1 } },
+       [")"] = { nil, 1 },
+       ["["] = { { ["]"] = 1 } },
+       ["]"] = { nil, 1 },
+       ["break"] = {},
+       ["do"] = { { ["end"] = 1 }, 1, 1 },
+       ["else"] = { { ["end"] = 1 }, 1 },
+       ["elseif"] = { { ["then"] = 1 }, 1 },
+       ["end"] = { [2] = 1 },
+       ["for"] = { { ["do"] = 1, ["in"] = 1 } },
+       ["function"] = { { ["end"] = 1 } },
+       ["if"] = { { ["then"] = 1 } },
+       ["in"] = { { ["do"] = 1 }, 1 },
+       ["local"] = {},
+       ["repeat"] = { { ["until"] = 1 } },
+       ["return"] = {},
+       ["then"] = {
+         { ["else"] = 1, ["elseif"] = 1, ["end"] = 1 },
+         1
+       },
+       ["until"] = { [2] = 1 },
+       ["while"] = { { ["do"] = 1 } },
+       ["{"] = { { ["}"] = 1 } },
+       ["}"] = { nil, 1 }
+     },
+     opts = {
+       ["#"] = { nil, 14 },
+       ["%"] = { 13 },
+       ["*"] = { 13 },
+       ["+"] = { 12 },
+       [","] = { 3 },
+       ["-"] = { 12, 14 },
+       ["."] = { 16 },
+       [".."] = { 11 },
+       ["/"] = { 13 },
+       ["//"] = { 13 },
+       [":"] = { 16 },
+       [";"] = { 1 },
+       ["<"] = { 6 },
+       ["<="] = { 6 },
+       ["="] = { 2 },
+       ["=="] = { 6 },
+       [">"] = { 6 },
+       [">="] = { 6 },
+       ["^"] = { 15 },
+       ["and"] = { 5 },
+       ["not"] = { nil, 14 },
+       ["or"] = { 4 },
+       ["~="] = { 6 }
+     },
+     reg = function: 0x59e777a9a740,
+     run = function: 0x59e777a9a690,
+     tb_until = function: 0x59e777a9a7c0,
+     tb_while = function: 0x59e777a9a800
+   },
+   Clear = {
+     function: 0x59e777a8e550,
+     function: 0x59e777a9a600,
+     function: 0x59e777a9ad10,
+     function: 0x59e777a9b420,
+     function: 0x59e777a9d650,
+     function: 0x59e777a985e0
+   },
+   Core = function: 0x59e777a9c520,
+   Event = {
+     main = {
+       lvl_close = { OP_st_f = function: 0x59e777a9dbb0 },
+       [2] = { OP_st_d = function: 0x59e777a9dcd0 }
+     },
+     reg = function: 0x59e777a9aea0,
+     run = function: 0x59e777a9aef0,
+     temp = {}
+   },
+   Iterator = function: 0x59e777a98990,
+   Level = {
+     close = function: 0x59e777a9b690,
+     ctrl = function: 0x59e777a9b750,
+     data = {
+       ["("] = { { [")"] = 1 } },
+       [")"] = { nil, 1 },
+       ["["] = { { ["]"] = 1 } },
+       ["]"] = { nil, 1 },
+       ["break"] = {},
+       ["do"] = { { ["end"] = 1 }, 1, 1 },
+       ["else"] = { { ["end"] = 1 }, 1 },
+       ["elseif"] = { { ["then"] = 1 }, 1 },
+       ["end"] = { [2] = 1 },
+       ["for"] = { { ["do"] = 1, ["in"] = 1 } },
+       ["function"] = { { ["end"] = 1 } },
+       ["if"] = { { ["then"] = 1 } },
+       ["in"] = { { ["do"] = 1 }, 1 },
+       ["local"] = {},
+       ["repeat"] = { { ["until"] = 1 } },
+       ["return"] = {},
+       ["then"] = {
+         { ["else"] = 1, ["elseif"] = 1, ["end"] = 1 },
+         1
+       },
+       ["until"] = { [2] = 1 },
+       ["while"] = { { ["do"] = 1 } },
+       ["{"] = { { ["}"] = 1 } },
+       ["}"] = { nil, 1 }
+     },
+     fin = function: 0x59e777a9b610,
+     open = function: 0x59e777a9b700
+   },
+   Loaded = {
+     [">code.cdata"] = false,
+     [">code.cssc.op_stack"] = false,
+     [">code.cssc.pdata"] = false,
+     [">code.lua.base"] = 1,
+     [">code.lua.meta_opt"] = { function: 0x59e777a9c160 },
+     [">code.lua.struct"] = false,
+     [">code.syntax_loader"] = { function: 0x59e777a91950 },
+     [">common.event"] = false,
+     [">common.level"] = false,
+     [">text.dual_queue.base"] = false,
+     [">text.dual_queue.iterator"] = false,
+     [">text.dual_queue.make_react"] = {
+       function: 0x59e777a912f0
+     },
+     [">text.dual_queue.parcer"] = false,
+     [">text.dual_queue.space_handler"] = false,
+     ["@cssc"] = true,
+     ["@cssc.NC"] = true,
+     ["@sys"] = true,
+     ["@sys.err"] = true
+   },
+   Operators = {
+     ["#"] = "#",
+     ["%"] = "%",
+     ["("] = function: 0x59e777a96810,
+     [")"] = function: 0x59e777a96930,
+     ["*"] = "*",
+     ["+"] = "+",
+     [","] = ",",
+     ["-"] = "-",
+     ["."] = ".",
+     [".."] = "..",
+     ["..."] = function: 0x59e777a96b20,
+     ["/"] = "/",
+     ["//"] = "//",
+     [":"] = ":",
+     [";"] = ";",
+     ["<"] = "<",
+     ["<="] = "<=",
+     ["="] = "=",
+     ["=="] = "==",
+     [">"] = ">",
+     [">="] = ">=",
+     ["?\""] = function: 0x59e777a9f300,
+     ["?'"] = function: 0x59e777a984f0,
+     ["?("] = function: 0x59e777a9f120,
+     ["?."] = function: 0x59e777a9efe0,
+     ["?:"] = function: 0x59e777a9f080,
+     ["?["] = function: 0x59e777a9f260,
+     ["?{"] = function: 0x59e777a9f1c0,
+     ["["] = function: 0x59e777a96460,
+     ["]"] = function: 0x59e777a96230,
+     ["^"] = "^",
+     ["{"] = function: 0x59e777a95fc0,
+     ["}"] = function: 0x59e777a96110,
+     ["~="] = "~="
+   },
+   PostLoad = {},
+   PostRun = {
+     function: 0x59e777a72340,
+     function: 0x59e777a9d5d0
+   },
+   PreRun = { function: 0x59e777a8efb0 },
+   Result = {
+     "local __cssc__op_nc=__lua_mc__runtime('nilF.basic');",
+     "         \n             ",
+     "local ",
+     "",
+     "nil_call ",
+     "= ",
+     "function ",
+     "",
+     "(",
+     "obj",
+     ") ",
+     "",
+     "return ",
+     "",
+     "__cssc__op_nc",
+     "",
+     "(",
+     "obj",
+     ")",
+     "",
+     "(",
+     ") ",
+     "",
+     "end\n             ",
+     "local ",
+     "",
+     "nil_call_str ",
+     "= ",
+     "function ",
+     "",
+     "(",
+     "obj",
+     ") ",
+     "",
+     "return ",
+     "",
+     "__cssc__op_nc",
+     "",
+     "(",
+     "obj",
+     ")",
+     "",
+     "\"str\" ",
+     "",
+     "end\n             ",
+     "local ",
+     "",
+     "nil_table_ind ",
+     "= ",
+     "function ",
+     "",
+     "(",
+     "obj",
+     ") ",
+     "",
+     "return ",
+     "",
+     "__cssc__op_nc",
+     "",
+     "(",
+     "obj",
+     ")",
+     ".",
+     "index ",
+     "",
+     "end\n             ",
+     "local ",
+     "",
+     "test_obj ",
+     "= ",
+     "{ ",
+     "index ",
+     "= ",
+     "1 ",
+     "}\n             ",
+     "",
+     "local ",
+     "",
+     "test_obj_nil ",
+     "= ",
+     "{",
+     "}\n             ",
+     "",
+     "local ",
+     "",
+     "test_func ",
+     "= ",
+     "function",
+     "",
+     "(",
+     "arg",
+     ") ",
+     "",
+     "if ",
+     "",
+     "arg",
+     "==",
+     "\"str\" ",
+     "",
+     "then ",
+     "",
+     "return ",
+     "",
+     "\"str\" ",
+     "",
+     "else ",
+     "",
+     "return ",
+     "",
+     "\"default\" ",
+     "",
+     "end ",
+     "",
+     "end\n             \n             ",
+     "--nil functions \n             ",
+     "assert",
+     "",
+     "(",
+     "nil_call",
+     "",
+     "(",
+     "test_func",
+     ")",
+     "==",
+     "\"default\"",
+     ")\n             ",
+     "",
+     "assert",
+     "",
+     "(",
+     "nil_call_str",
+     "",
+     "(",
+     "test_func",
+     ")",
+     "==",
+     "\"str\"",
+     ")\n             ",
+     "",
+     "assert",
+     "",
+     "(",
+     "nil_call",
+     "",
+     "(",
+     ")",
+     "==",
+     "nil",
+     ")\n             ",
+     "",
+     "assert",
+     "",
+     "(",
+     "nil_call_str",
+     "",
+     "(",
+     ")",
+     "==",
+     "nil",
+     ")\n             \n             ",
+     "--table nil indexing\n             ",
+     "",
+     "assert",
+     "",
+     "(",
+     "nil_table_ind",
+     "",
+     "(",
+     "test_obj",
+     ")",
+     "==",
+     "1",
+     ")\n             ",
+     "",
+     "assert",
+     "",
+     "(",
+     "nil_table_ind",
+     "",
+     "(",
+     "test_obj_nil",
+     ")",
+     "==",
+     "nil",
+     ")\n             ",
+     "",
+     "assert",
+     "",
+     "(",
+     "nil_table_ind",
+     "",
+     "(",
+     ")",
+     "==",
+     "nil",
+     ")\n             \n         ",
+     ""
+   },
+   Return = function: 0x59e777a8e510,
+   Runtime = {
+     build = function: 0x59e777a9d520,
+     data = {
+       ["nilF.basic"] = function: 0x59e777a9e4e0,
+       ["nilF.dual"] = function: 0x59e777a9e640
+     },
+     is_done = true,
+     locals = { "__cssc__op_nc" },
+     mk_env = function: 0x59e777a9d590,
+     modules = { "'nilF.basic'" },
+     path = "__lua_mc__runtime",
+     reg = function: 0x59e777a9d4b0
+   },
+   Struct = {
+     function: 0x59e777a902f0,
+     function: 0x59e777a9a070,
+     final = function: 0x59e777a8eb10
+   },
+   Words = {
+     ["and"] = function: 0x59e777a97bf0,
+     ["break"] = function: 0x59e777a95770,
+     ["do"] = function: 0x59e777a92250,
+     ["else"] = function: 0x59e777a92310,
+     ["elseif"] = function: 0x59e777a95140,
+     ["end"] = function: 0x59e777a91f00,
+     ["false"] = function: 0x59e777a97480,
+     ["for"] = function: 0x59e777a948f0,
+     ["function"] = function: 0x59e777a94290,
+     ["if"] = function: 0x59e777a939a0,
+     ["in"] = function: 0x59e777a93440,
+     ["local"] = function: 0x59e777a95350,
+     ["nil"] = function: 0x59e777a96c90,
+     ["not"] = function: 0x59e777a99540,
+     ["or"] = function: 0x59e777a97830,
+     ["repeat"] = function: 0x59e777a94ed0,
+     ["return"] = function: 0x59e777a95560,
+     ["then"] = function: 0x59e777a923d0,
+     ["true"] = function: 0x59e777a96e00,
+     ["until"] = function: 0x59e777a93680,
+     ["while"] = function: 0x59e777a94bb0
+   },
+   args = {},
+   clear = function: 0x59e777a87590,
+   continue = function: 0x59e777a5d590,
+   cssc_load = function: 0x59e777a72380,
+   ctrl = "sys.err,cssc.NC",
+   eject = function: 0x59e777a9b900,
+   error = function: 0x59e777a4c2d0,
+   get_num_prt = function: 0x59e777a99f60,
+   inject = function: 0x59e777a9b890,
+   inject_operator = function: 0x59e777a9ddd0,
+   line = 20,
+   load_lib = function: 0x59e777a634e0,
+   log = {
+     "[001] [  Log  ]  : Load @sys",
+     "[002] [  Log  ]  : Load @sys.err",
+     "[003] [  Log  ]  : Load @cssc",
+     "[004] [  Log  ]  : Load >text.dual_queue.base",
+     "[005] [  Log  ]  : Load >text.dual_queue.parcer",
+     "[006] [  Log  ]  : Load >text.dual_queue.iterator",
+     "[007] [  Log  ]  : Load >text.dual_queue.space_handler",
+     "[008] [  Log  ]  : Load >code.lua.base",
+     "[009] [  Log  ]  : Load >text.dual_queue.make_react",
+     "[010] [  Log  ]  : Load >code.syntax_loader",
+     "[011] [  Log  ]  : Load >code.lua.struct",
+     "[012] [  Log  ]  : Load >code.cdata",
+     "[013] [  Log  ]  : Load >common.event",
+     "[014] [  Log  ]  : Load >common.level",
+     "[015] [  Log  ]  : Load >code.lua.meta_opt",
+     "[016] [  Log  ]  : Load @cssc.NC",
+     "[017] [  Log  ]  : Load >code.cssc.pdata",
+     "[018] [  Log  ]  : Load >code.cssc.op_stack",
+     "[019] [  Log  ]  : Load >code.syntax_loader",
+     _ = "  Log  "
+   },
+   max_op_len = 3,
+   meta = { __name = "cssc_unit", __type = "cssc_unit" },
+   run = function: 0x59e777a5d5e0,
+   split_seq = function: 0x59e777a9a030,
+   src = "         \n             local nil_call = function (obj) return obj?() end\n             local nil_call_str = function (obj) return obj?\"str\" end\n             local nil_table_ind = function (obj) return obj?.index end\n             local test_obj = { index = 1 }\n             local test_obj_nil = {}\n             local test_func = function(arg) if arg==\"str\" then return \"str\" else return \"default\" end end\n             \n             --nil functions \n             assert(nil_call(test_func)==\"default\")\n             assert(nil_call_str(test_func)==\"str\")\n             assert(nil_call()==nil)\n             assert(nil_call_str()==nil)\n             \n             --table nil indexing\n             assert(nil_table_ind(test_obj)==1)\n             assert(nil_table_ind(test_obj_nil)==nil)\n             assert(nil_table_ind()==nil)\n             \n         ",
+   tab_run = function: 0x59e777a77bb0,
+   warn = { _ = "Warning" }
+ }
+> ^C

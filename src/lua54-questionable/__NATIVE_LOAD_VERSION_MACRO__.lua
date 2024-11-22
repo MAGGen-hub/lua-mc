@@ -1,0 +1,1 @@
+local native_load = A(load,E)
