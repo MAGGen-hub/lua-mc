@@ -1,5 +1,5 @@
 ## Проект Lua-MC
-Lua-MC (lua macro compiller) - препроцессор для языка Lua версии Lua5.1
+Lua-MC (lua macro compiller) - препроцессор для языка Lua версии Lua5.1\
 Основная цель проекта - расширение функционала языка Lua.
 #### На данный момент реализован следующий функционал
 - Полная поддержка операторов введённых в Lua5.3 включая мета-методы:\
@@ -31,7 +31,8 @@ Lua-MC (lua macro compiller) - препроцессор для языка Lua в
 2. Установить одну из вариаций библиотеки bit:
 	- bitop-lua5.1 (рекомендуется)
 	- bit32-lua5.1
-	- Использовать lua версию: https://github.com/AlberTajuelo/bitop-lua/blob/master/src/bitop/funcs.lua
+	- Использовать lua версию:\
+   	  https://github.com/AlberTajuelo/bitop-lua/blob/master/src/bitop/funcs.lua \
 	  (нужно будет отдельно выполнить:`package.path['bitop']=loadfile"funcs.lua"`)
 3. Поместить проект в любую папку
 4. Занести путь папки в package.path
