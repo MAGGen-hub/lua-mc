@@ -29,7 +29,8 @@ local version	  = "4.5-beta"
 local version_num  = 4.5
 
 --COMPILE DATA
-local work_dir	 = "/cssc_final"
+local actual_dir = "/lua_mc_fix"
+local work_dir	 = actual_dir.."/lua-mc"
 local src_dir	  = fs.combine(work_dir,"src")
 local out_dir	  = fs.combine(work_dir,"out")
 local protect_src  = fs.combine(src_dir ,"protection_and_variable_layer.lua")
@@ -163,4 +164,4 @@ end
 --CLEAR STRING METATABLE
 string.gifsub = nil
 --WARNING: debug feature! disable if unwanted
-shell.run("/cssc_final/out/lua_mc__craft_os__original.lua")
+shell.run(actual_dir.."/lua-mc/out/lua_mc__craft_os__original.lua")

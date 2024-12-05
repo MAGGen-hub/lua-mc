@@ -4,6 +4,7 @@
     local prohibited_area = t_swap{"(","{","[","for","while","if","elseif","until"}
     local cond ={["&&"]="and",["||"]="or"}
     local bitw
+    local bt
 
     local b_func={}
     local s=1
@@ -13,6 +14,7 @@
 && ||
 ]]--TODO: add support 
     if Control.Operators["~"] then stx=stx.."| & >> <<\n" 
+        bt=t_swap{shl='<<',shr='>>',bxor='~',bor='|',band='&',idiv='//'}
         bitw={["|"]="__cssc__bit_bor",["&"]="__cssc__bit_band",[">>"]="__cssc__bit_shr",["<<"]="__cssc__bit_shl"} --last one:questionable_addition
     end--TODO: temporal solution! rework!
     Control.Runtime.build("op.qad",function(a,b)
@@ -26,6 +28,7 @@
             p=s==3 and bitw[v] or v=="?" and "__cssc__op_qad"
             Control.Operators[v.."="]=function()
                 if  v=="?" and not used then used =__TRUE__ Control.Runtime.reg("__cssc__op_qad","op.qad")end
+                if bitw and bt[v] and not Control.BO_access[v] then  Control.BO_access[v]=__TRUE__ Control.Runtime.reg(bitw[v],"bit."..bt[v])end
                 local lvl=Control.Level[#Control.Level]
                 if prohibited_area[lvl.type] or #(lvl.OP_st or"")>0 then
                     Control.error("Attempt to use additional asignment in prohibited area!")

@@ -20,6 +20,7 @@
     --local after = t_swap{__KEYWORD__,__CLOSE_BREAKET__}
     local loc_base = "__cssc__bit_"
     local used_opts= {}
+    Control.BO_access = used_opts
     local num="number"
     local idiv_func=native_load([[local p,n,t,g,e,F,f={},"number",... f=function(a,b)local ta,tb=t(a)==n, t(b)==n if ta and tb then return F(a/b)end e("bad argument #"..(ta and 2 or 1).." (expected 'number', got '"..(ta and t(b) or t(a)).."')")end
     return function(a,b)return((g(a)or p).__idiv or(g(b)or p).__idiv or f)(a,b)end]],"OP: '//'",nil,nil)(type,getmetatable,error,floor)
@@ -79,5 +80,5 @@
     else
         Control.Runtime.build("bitD.bnot",bit32.bnot,__TRUE__)
     end
-    insert(Control.Clear,function()used_opts={}end)
+    insert(Control.Clear,function()used_opts={}Control.BO_access=used_opts end)
 end}

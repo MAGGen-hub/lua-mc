@@ -815,6 +815,7 @@ end
     --local after = t_swap{4,10}
     local loc_base = "__cssc__bit_"
     local used_opts= {}
+    Control.BO_access = used_opts
     local num="number"
     local idiv_func=native_load([[local p,n,t,g,e,F,f={},"number",... f=function(a,b)local ta,tb=t(a)==n, t(b)==n if ta and tb then return F(a/b)end e("bad argument #"..(ta and 2 or 1).." (expected 'number', got '"..(ta and t(b) or t(a)).."')")end
     return function(a,b)return((g(a)or p).__idiv or(g(b)or p).__idiv or f)(a,b)end]],"OP: '//'",nil,nil)(type,getmetatable,error,floor)
@@ -874,7 +875,7 @@ end
     else
         Control.Runtime.build("bitD.bnot",bit32.bnot,1)
     end
-    insert(Control.Clear,function()used_opts={}end)
+    insert(Control.Clear,function()used_opts={}Control.BO_access=used_opts end)
 end},
 CA={[_init]=function(Control)--C/C++ additional asignment operators
     Control:load_lib"code.cssc.pdata"
@@ -882,6 +883,7 @@ CA={[_init]=function(Control)--C/C++ additional asignment operators
     local prohibited_area = t_swap{"(","{","[","for","while","if","elseif","until"}
     local cond ={["&&"]="and",["||"]="or"}
     local bitw
+    local bt
 
     local b_func={}
     local s=1
@@ -891,6 +893,7 @@ CA={[_init]=function(Control)--C/C++ additional asignment operators
 && ||
 ]]--TODO: add support 
     if Control.Operators["~"] then stx=stx.."| & >> <<\n" 
+        bt=t_swap{shl='<<',shr='>>',bxor='~',bor='|',band='&',idiv='//'}
         bitw={["|"]="__cssc__bit_bor",["&"]="__cssc__bit_band",[">>"]="__cssc__bit_shr",["<<"]="__cssc__bit_shl"} --last one:questionable_addition
     end--TODO: temporal solution! rework!
     Control.Runtime.build("op.qad",function(a,b)
@@ -904,6 +907,7 @@ CA={[_init]=function(Control)--C/C++ additional asignment operators
             p=s==3 and bitw[v] or v=="?" and "__cssc__op_qad"
             Control.Operators[v.."="]=function()
                 if  v=="?" and not used then used =1 Control.Runtime.reg("__cssc__op_qad","op.qad")end
+                if bitw and bt[v] and not Control.BO_access[v] then  Control.BO_access[v]=1 Control.Runtime.reg(bitw[v],"bit."..bt[v])end
                 local lvl=Control.Level[#Control.Level]
                 if prohibited_area[lvl.type] or #(lvl.OP_st or"")>0 then
                     Control.error("Attempt to use additional asignment in prohibited area!")
@@ -1126,6 +1130,7 @@ KS={[_init]=function(Control,mod,arg)--keyword shorcuts
     local stx = [[O
 || or
 && and
+! not
 @ local
 $ return
 ]]
@@ -1152,7 +1157,7 @@ $ return
 		end
 	end
     Control:load_lib"code.syntax_loader"(stx,{O=function(k,v)
-        Control.Operators[k]=make_react(v,match(v,"^[ao]") and 2 or 4,#k)
+        Control.Operators[k]=make_react(v,match(v,"^[aon]") and 2 or 4,#k)
     end})
 end},
 LF={[_init]=function(Control)
